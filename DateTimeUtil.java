@@ -27,7 +27,7 @@ import java.util.function.Function;
  * This class provides an assortment of date and time converting and calculation methods,
  * most of which have auto-parsing support using {@link #parseDate(Object)},
  * {@link #parseTime(Object)} and {@link #parse(Object)}.<br>
- * @version 1.1.3 - 2023-05-15
+ * @version 1.1.4 - 2023-12-06
  * @author scintilla0
  */
 public class DateTimeUtil {
@@ -1602,6 +1602,24 @@ public class DateTimeUtil {
 
 	/**
 	 * <font color="#EE2222"><b>Time operation.</b></font><br>
+	 * Efficiently formats the current time with the preset format: <b><u>HHmm</u></b>, eg.: <b><u>1230</u></b>.
+	 * @return Formatted <b>String</b> char sequence.
+	 */
+	public static String nowTime_shortPlain() {
+		return nowTime(TIME_SHORT_PLAIN);
+	}
+
+	/**
+	 * <font color="#EE2222"><b>Time operation.</b></font><br>
+	 * Efficiently formats the current time with the preset format: <b><u>HH:mm</u></b>, eg.: <b><u>12:30</u></b>.
+	 * @return Formatted <b>String</b> char sequence.
+	 */
+	public static String nowTime_shortColon() {
+		return nowTime(TIME_SHORT_COLON);
+	}
+
+	/**
+	 * <font color="#EE2222"><b>Time operation.</b></font><br>
 	 * Efficiently formats the current time with the preset format: <b><u>HHmmss</u></b>, eg.: <b><u>123050</u></b>.
 	 * @return Formatted <b>String</b> char sequence.
 	 */
@@ -1654,6 +1672,28 @@ public class DateTimeUtil {
 	 */
 	public static String nowTime(DateTimeFormatter format) {
 		return formatTime(LocalTime.now(), format);
+	}
+
+	/**
+	 * <font color="#EE2222"><b>Time operation.</b></font><br>
+	 * Efficiently formats the target time with the preset format: <b><u>HHmm</u></b>, eg.: <b><u>1230</u></b>.<br>
+	 * Uses {@link #parseDate(Object)} for automatic parsing.
+	 * @param source Target object to be parsed and formatted.
+	 * @return Formatted <b>String</b> char sequence.
+	 */
+	public static String formatTime_shortPlain(Object source) {
+		return formatTime(source, TIME_SHORT_PLAIN);
+	}
+
+	/**
+	 * <font color="#EE2222"><b>Time operation.</b></font><br>
+	 * Efficiently formats the target time with the preset format: <b><u>HH:mm</u></b>, eg.: <b><u>12:30</u></b>.<br>
+	 * Uses {@link #parseDate(Object)} for automatic parsing.
+	 * @param source Target object to be parsed and formatted.
+	 * @return Formatted <b>String</b> char sequence.
+	 */
+	public static String formatTime_shortColon(Object source) {
+		return formatTime(source, TIME_SHORT_COLON);
 	}
 
 	/**
@@ -2279,6 +2319,36 @@ public class DateTimeUtil {
 
 	/**
 	 * <font color="EE22EE"><b>DateTime operation.</b></font><br>
+	 * Efficiently formats the current date time with the preset format: <b><u>yyyyMMddHHmm</u></b>,<br>
+	 * eg.: <b><u>200207211230</u></b>.
+	 * @return Formatted <b>String</b> char sequence.
+	 */
+	public static String now_shortPlain() {
+		return now(DATE_TIME_SHORT_PLAIN);
+	}
+
+	/**
+	 * <font color="EE22EE"><b>DateTime operation.</b></font><br>
+	 * Efficiently formats the current date time with the preset format: <b><u>yyyy/MM/dd HH:mm</u></b>,<br>
+	 * eg.: <b><u>2002/07/21 12:30</u></b>.
+	 * @return Formatted <b>String</b> char sequence.
+	 */
+	public static String now_shortSlashColon() {
+		return now(DATE_TIME_SHORT_SLASH_COLON);
+	}
+
+	/**
+	 * <font color="EE22EE"><b>DateTime operation.</b></font><br>
+	 * Efficiently formats the current date time with the preset format: <b><u>yyyy-MM-dd HH:mm</u></b>,<br>
+	 * eg.: <b><u>2002-07-21 12:30</u></b>.
+	 * @return Formatted <b>String</b> char sequence.
+	 */
+	public static String now_shortDashColon() {
+		return now(DATE_TIME_SHORT_DASH_COLON);
+	}
+
+	/**
+	 * <font color="EE22EE"><b>DateTime operation.</b></font><br>
 	 * Efficiently formats the current date time with the preset format: <b><u>yyyyMMddHHmmss</u></b>,<br>
 	 * eg.: <b><u>20020721123050</u></b>.
 	 * @return Formatted <b>String</b> char sequence.
@@ -2355,6 +2425,42 @@ public class DateTimeUtil {
 	 */
 	public static String now(DateTimeFormatter format) {
 		return format(LocalTime.now(), format);
+	}
+
+	/**
+	 * <font color="EE22EE"><b>DateTime operation.</b></font><br>
+	 * Efficiently formats the target date time with the preset format: <b><u>yyyyMMddHHmm</u></b>,<br>
+	 * eg.: <b><u>200207211230</u></b>.<br>
+	 * Uses {@link #parse(Object)} for automatic parsing.
+	 * @param source Target object to be parsed and formatted.
+	 * @return Formatted <b>String</b> char sequence.
+	 */
+	public static String format_shortPlain(Object source) {
+		return format(source, DATE_TIME_SHORT_PLAIN);
+	}
+
+	/**
+	 * <font color="EE22EE"><b>DateTime operation.</b></font><br>
+	 * Efficiently formats the target date time with the preset format: <b><u>yyyy/MM/dd HH:mm</u></b>,<br>
+	 * eg.: <b><u>2002/07/21 12:30</u></b>.<br>
+	 * Uses {@link #parse(Object)} for automatic parsing.
+	 * @param source Target object to be parsed and formatted.
+	 * @return Formatted <b>String</b> char sequence.
+	 */
+	public static String format_shortSlashColon(Object source) {
+		return format(source, DATE_TIME_SHORT_SLASH_COLON);
+	}
+
+	/**
+	 * <font color="EE22EE"><b>DateTime operation.</b></font><br>
+	 * Efficiently formats the target date time with the preset format: <b><u>yyyy-MM-dd HH:mm</u></b>,<br>
+	 * eg.: <b><u>2002-07-21 12:30</u></b>.<br>
+	 * Uses {@link #parse(Object)} for automatic parsing.
+	 * @param source Target object to be parsed and formatted.
+	 * @return Formatted <b>String</b> char sequence.
+	 */
+	public static String format_shortDashColon(Object source) {
+		return format(source, DATE_TIME_SHORT_DASH_COLON);
 	}
 
 	/**
@@ -2531,6 +2637,10 @@ public class DateTimeUtil {
 	/** <font color="#2222EE"><b>Date format</b></font> of pattern: <b><u>MMddyy</u></b>, eg.: <b><u>072102</u></b>. */
 	public static final DateTimeFormatter _DATE_MDY_PLAIN = DateTimeFormatter.ofPattern("MMddyy");
 
+	/** <font color="#EE2222"><b>Time format</b></font> of pattern: <b><u>HHmm</u></b>, eg.: <b><u>1230</u></b>. */
+	public static final DateTimeFormatter TIME_SHORT_PLAIN = DateTimeFormatter.ofPattern("HHmm");
+	/** <font color="#EE2222"><b>Time format</b></font> of pattern: <b><u>HH:mm</u></b>, eg.: <b><u>12:30</u></b>. */
+	public static final DateTimeFormatter TIME_SHORT_COLON = DateTimeFormatter.ofPattern("HH:mm");
 	/** <font color="#EE2222"><b>Time format</b></font> of pattern: <b><u>HHmmss</u></b>, eg.: <b><u>123050</u></b>. */
 	public static final DateTimeFormatter TIME_BASIC_PLAIN = DateTimeFormatter.ofPattern("HHmmss");
 	/** <font color="#EE2222"><b>Time format</b></font> of pattern: <b><u>HH:mm:ss</u></b>, eg.: <b><u>12:30:50</u></b>. */
@@ -2540,6 +2650,12 @@ public class DateTimeUtil {
 	/** <font color="#EE2222"><b>Time format</b></font> of pattern: <b><u>HH:mm:ss.SSS</u></b>, eg.: <b><u>12:30:05.000</u></b>. */
 	public static final DateTimeFormatter TIME_FULL_COLON = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
+	/** <font color="EE22EE"><b>DateTime format</b></font> of pattern: <b><u>yyyyMMddHHmm</u></b>, eg.: <b><u>200207211230</u></b>. */
+	public static final DateTimeFormatter DATE_TIME_SHORT_PLAIN = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+	/** <font color="EE22EE"><b>DateTime format</b></font> of pattern: <b><u>yyyy/MM/dd HH:mm</u></b>, eg.: <b><u>2002/07/21 12:30</u></b>. */
+	public static final DateTimeFormatter DATE_TIME_SHORT_SLASH_COLON = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+	/** <font color="EE22EE"><b>DateTime format</b></font> of pattern: <b><u>yyyy-MM-dd HH:mm</u></b>, eg.: <b><u>2002-07-21 12:30</u></b>. */
+	public static final DateTimeFormatter DATE_TIME_SHORT_DASH_COLON = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	/** <font color="EE22EE"><b>DateTime format</b></font> of pattern: <b><u>yyyyMMddHHmmss</u></b>, eg.: <b><u>20020721123050</u></b>. */
 	public static final DateTimeFormatter DATE_TIME_BASIC_PLAIN = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 	/** <font color="EE22EE"><b>DateTime format</b></font> of pattern: <b><u>yyyy/MM/dd HH:mm:ss</u></b>, eg.: <b><u>2002/07/21 12:30:50</u></b>. */
@@ -2608,11 +2724,16 @@ public class DateTimeUtil {
 		presetDateFormatMap.put(_DATE_SHORT_Y_DASH, "-01");
 		presetDateFormatMap.put(_DATE_MDY_PLAIN, EMPTY);
 
+		presetTimeFormatMap.put(TIME_SHORT_PLAIN, EMPTY);
+		presetTimeFormatMap.put(TIME_SHORT_COLON, EMPTY);
 		presetTimeFormatMap.put(TIME_BASIC_PLAIN, "00");
 		presetTimeFormatMap.put(TIME_BASIC_COLON, ":00");
 		presetTimeFormatMap.put(TIME_FULL_PLAIN, "00000");
 		presetTimeFormatMap.put(TIME_FULL_COLON, ":00.000");
 
+		presetDateTimeFormatMap.put(DATE_TIME_SHORT_PLAIN, EMPTY);
+		presetDateTimeFormatMap.put(DATE_TIME_SHORT_SLASH_COLON, EMPTY);
+		presetDateTimeFormatMap.put(DATE_TIME_SHORT_DASH_COLON, EMPTY);
 		presetDateTimeFormatMap.put(DATE_TIME_BASIC_PLAIN, EMPTY);
 		presetDateTimeFormatMap.put(DATE_TIME_BASIC_SLASH_COLON, EMPTY);
 		presetDateTimeFormatMap.put(DATE_TIME_BASIC_DASH_COLON, EMPTY);
