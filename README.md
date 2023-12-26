@@ -3,6 +3,9 @@ A utility class that provides an assortment of date and time converting and calc
 
 ### Change log
 
+#### 1.1.5 (2023-12-26)
+*	Add methods: **compareAsc()**, **compareDesc()**.
+
 #### 1.1.4 (2023-12-06)
 *	Add support for time format patterns without second.
 

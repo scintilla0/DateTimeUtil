@@ -12,6 +12,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.function.Function;
  * This class provides an assortment of date and time converting and calculation methods,
  * most of which have auto-parsing support using {@link #parseDate(Object)},
  * {@link #parseTime(Object)} and {@link #parse(Object)}.<br>
- * @version 1.1.4 - 2023-12-06
+ * @version 1.1.5 - 2023-12-26
  * @author scintilla0
  */
 public class DateTimeUtil {
@@ -921,6 +922,32 @@ public class DateTimeUtil {
 		return compare(parseDate(comparandObject1), parseDate(comparandObject2));
 	}
 
+	/**
+	 * <font color="#2222EE"><b>Date operation.</b></font><br>
+	 * Provides an ascending <b>Comparator&lt;Type&gt;</b> available in methods such as {@link List#sort(Comparator)}.<br>
+	 * Uses {@link #compareDate(Object, Object)} as base method.
+	 * <pre><b><i>Eg.:</i></b>&#9;userList.sort(DecimalUtil.compareDateAsc(User::getBirthDay))</pre>
+	 * @param <Type> The type of object to be compared.
+	 * @param fieldGetter The getter of the field to be used for comparing.
+	 * @return <b>Comparator&lt;Type&gt;</b><br>
+	 */
+	public static <Type> Comparator<Type> compareDateAsc(Function<Type, Object> fieldGetter) {
+		return (entity1, entity2) -> compareDate(fieldGetter.apply(entity1), fieldGetter.apply(entity2));
+	}
+
+	/**
+	 * <font color="#2222EE"><b>Date operation.</b></font><br>
+	 * Provides a descending <b>Comparator&lt;Type&gt;</b> available in methods such as {@link List#sort(Comparator)}.<br>
+	 * Uses {@link #compare(Object, Object)} as base method.
+	 * <pre><b><i>Eg.:</i></b>&#9;userList.sort(DecimalUtil.compareDateDesc(User::getBirthDay))</pre>
+	 * @param <Type> The type of object to be compared.
+	 * @param fieldGetter The getter of the field to be used for comparing.
+	 * @return <b>Comparator&lt;Type&gt;</b><br>
+	 */
+	public static <Type> Comparator<Type> compareDateDesc(Function<Type, Object> fieldGetter) {
+		return (entity1, entity2) -> compareDate(fieldGetter.apply(entity2), fieldGetter.apply(entity1));
+	}
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// date output
 
@@ -1595,6 +1622,32 @@ public class DateTimeUtil {
 	 */
 	public static int compareTime(Object comparandObject1, Object comparandObject2) {
 		return compare(parseTime(comparandObject1), parseTime(comparandObject2));
+	}
+
+	/**
+	 * <font color="#EE2222"><b>Time operation.</b></font><br>
+	 * Provides an ascending <b>Comparator&lt;Type&gt;</b> available in methods such as {@link List#sort(Comparator)}.<br>
+	 * Uses {@link #compareTime(Object, Object)} as base method.
+	 * <pre><b><i>Eg.:</i></b>&#9;lessonList.sort(DecimalUtil.compareTimeAsc(Lesson::getBeginTime))</pre>
+	 * @param <Type> The type of object to be compared.
+	 * @param fieldGetter The getter of the field to be used for comparing.
+	 * @return <b>Comparator&lt;Type&gt;</b><br>
+	 */
+	public static <Type> Comparator<Type> compareTimeAsc(Function<Type, Object> fieldGetter) {
+		return (entity1, entity2) -> compareTime(fieldGetter.apply(entity1), fieldGetter.apply(entity2));
+	}
+
+	/**
+	 * <font color="#EE2222"><b>Time operation.</b></font><br>
+	 * Provides a descending <b>Comparator&lt;Type&gt;</b> available in methods such as {@link List#sort(Comparator)}.<br>
+	 * Uses {@link #compare(Object, Object)} as base method.
+	 * <pre><b><i>Eg.:</i></b>&#9;lessonList.sort(DecimalUtil.compareTimeDesc(Lesson::getBeginTime))</pre>
+	 * @param <Type> The type of object to be compared.
+	 * @param fieldGetter The getter of the field to be used for comparing.
+	 * @return <b>Comparator&lt;Type&gt;</b><br>
+	 */
+	public static <Type> Comparator<Type> compareTimeDesc(Function<Type, Object> fieldGetter) {
+		return (entity1, entity2) -> compareTime(fieldGetter.apply(entity2), fieldGetter.apply(entity1));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2312,6 +2365,32 @@ public class DateTimeUtil {
 			return -1;
 		}
 		return 0;
+	}
+
+	/**
+	 * <font color="EE22EE"><b>DateTime operation.</b></font><br>
+	 * Provides an ascending <b>Comparator&lt;Type&gt;</b> available in methods such as {@link List#sort(Comparator)}.<br>
+	 * Uses {@link #compareTime(Object, Object)} as base method.
+	 * <pre><b><i>Eg.:</i></b>&#9;eventList.sort(DecimalUtil.compareAsc(Event::getEventDateTime))</pre>
+	 * @param <Type> The type of object to be compared.
+	 * @param fieldGetter The getter of the field to be used for comparing.
+	 * @return <b>Comparator&lt;Type&gt;</b><br>
+	 */
+	public static <Type> Comparator<Type> compareAsc(Function<Type, Object> fieldGetter) {
+		return (entity1, entity2) -> compare(fieldGetter.apply(entity1), fieldGetter.apply(entity2));
+	}
+
+	/**
+	 * <font color="EE22EE"><b>DateTime operation.</b></font><br>
+	 * Provides a descending <b>Comparator&lt;Type&gt;</b> available in methods such as {@link List#sort(Comparator)}.<br>
+	 * Uses {@link #compare(Object, Object)} as base method.
+	 * <pre><b><i>Eg.:</i></b>&#9;eventList.sort(DecimalUtil.compareDesc(Event::getEventDateTime))</pre>
+	 * @param <Type> The type of object to be compared.
+	 * @param fieldGetter The getter of the field to be used for comparing.
+	 * @return <b>Comparator&lt;Type&gt;</b><br>
+	 */
+	public static <Type> Comparator<Type> compareDesc(Function<Type, Object> fieldGetter) {
+		return (entity1, entity2) -> compare(fieldGetter.apply(entity2), fieldGetter.apply(entity1));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
