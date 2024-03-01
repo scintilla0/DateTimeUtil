@@ -3,6 +3,9 @@ A utility class that provides an assortment of date and time converting and calc
 
 ### Change log
 
+#### 1.1.6 (2024-03-01)
+*	All **areIn____()** methods accept multiple arguments.
+
 #### 1.1.5 (2023-12-26)
 *	Add methods: **compareAsc()**, **compareDesc()**.
 

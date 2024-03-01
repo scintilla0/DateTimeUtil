@@ -21,14 +21,14 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * Copyright (c) 2023 scintilla0 (<a href="https://github.com/scintilla0">https://github.com/scintilla0</a>)<br>
+ * Copyright (c) 2023-2024 scintilla0 (<a href="https://github.com/scintilla0">https://github.com/scintilla0</a>)<br>
  * license MIT License <a href="http://www.opensource.org/licenses/mit-license.html">http://www.opensource.org/licenses/mit-license.html</a><br>
  * license GPL2 License <a href="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a><br>
  * <br>
  * This class provides an assortment of date and time converting and calculation methods,
  * most of which have auto-parsing support using {@link #parseDate(Object)},
  * {@link #parseTime(Object)} and {@link #parse(Object)}.<br>
- * @version 1.1.5 - 2023-12-26
+ * @version 1.1.6 - 2024-03-01
  * @author scintilla0
  */
 public class DateTimeUtil {
@@ -794,47 +794,50 @@ public class DateTimeUtil {
 
 	/**
 	 * <font color="#2222EE"><b>Date operation.</b></font><br>
-	 * Evaluates if the two target dates represent the same date.<br>
+	 * Evaluates if the target dates represent the same date.<br>
 	 * Uses {@link #parseDate(Object)} for automatic parsing.
-	 * @param comparandObject1 Target date object to be compared.
-	 * @param comparandObject2 Target date object to be compared.
-	 * @return {@code true} if equal.
+	 * @param comparandObjects Target date objects to be compared.
+	 * @return {@code true} if all equal.
 	 */
-	public static boolean areSameDate(Object comparandObject1, Object comparandObject2) {
-		return compareDate(comparandObject1, comparandObject2) == 0;
+	public static boolean areSameDate(Object... comparandObjects) {
+		return Arrays.stream(comparandObjects).allMatch(comparand -> compareDate(comparandObjects[0], comparand) == 0);
 	}
 
 	/**
 	 * <font color="#2222EE"><b>Date operation.</b></font><br>
-	 * Evaluates if the two target dates are in the same month.<br>
+	 * Evaluates if the target dates are in the same month.<br>
 	 * Uses {@link #parseDate(Object)} for automatic parsing.
-	 * @param comparandObject1 Target date object to be compared.
-	 * @param comparandObject2 Target date object to be compared.
-	 * @return {@code true} if in.
+	 * @param comparandObjects Target date objects to be compared.
+	 * @return {@code true} if all in the same month.
 	 */
-	public static boolean areInSameMonth(Object comparandObject1, Object comparandObject2) {
-		LocalDate comparand1 = parseDate(comparandObject1), comparand2 = parseDate(comparandObject2);
-		if (comparand1 == null || comparand2 == null) {
-			return false;
-		}
-		return comparand1.getYear() == comparand2.getYear() &&
-				comparand1.getMonthValue() == comparand2.getMonthValue();
+	public static boolean areInSameMonth(Object... comparandObjects) {
+		return areInSameDateCore(Arrays.asList(LocalDate::getYear, LocalDate::getMonthValue), comparandObjects);
 	}
 
 	/**
 	 * <font color="#2222EE"><b>Date operation.</b></font><br>
-	 * Evaluates if the two target dates are in the same year.<br>
+	 * Evaluates if the target dates are in the same year.<br>
 	 * Uses {@link #parseDate(Object)} for automatic parsing.
-	 * @param comparandObject1 Target date object to be compared.
-	 * @param comparandObject2 Target date object to be compared.
-	 * @return {@code true} if in.
+	 * @param comparandObjects Target date objects to be compared.
+	 * @return {@code true} if all in the same year.
 	 */
-	public static boolean areInSameYear(Object comparandObject1, Object comparandObject2) {
-		LocalDate comparand1 = parseDate(comparandObject1), comparand2 = parseDate(comparandObject2);
-		if (comparand1 == null || comparand2 == null) {
-			return false;
+	public static boolean areInSameYear(Object... comparandObjects) {
+		return areInSameDateCore(Arrays.asList(LocalDate::getYear), comparandObjects);
+	}
+
+	private static boolean areInSameDateCore(List<Function<LocalDate, Integer>> comparators, Object... comparandObjects) {
+		for (int index = 1; index < comparandObjects.length; index ++) {
+			LocalDate comparand1 = parseDate(comparandObjects[0]), comparand2 = parseDate(comparandObjects[index]);
+			if (comparand1 == null || comparand2 == null) {
+				return false;
+			}
+			for (Function<LocalDate, Integer> comparator : comparators) {
+				if (!comparator.apply(comparand1).equals(comparator.apply(comparand2))) {
+					return false;
+				}
+			}
 		}
-		return comparand1.getYear() == comparand2.getYear();
+		return true;
 	}
 
 	/**
@@ -1490,53 +1493,50 @@ public class DateTimeUtil {
 
 	/**
 	 * <font color="#EE2222"><b>Time operation.</b></font><br>
-	 * Evaluates if the two target times represent the same second.<br>
+	 * Evaluates if the target times represent the same second.<br>
 	 * Uses {@link #parseDate(Object)} for automatic parsing.
-	 * @param comparandObject1 Target time object to be compared.
-	 * @param comparandObject2 Target time object to be compared.
-	 * @return {@code true} if equal.
+	 * @param comparandObjects Target time objects to be compared.
+	 * @return {@code true} if all in the same second.
 	 */
-	public static boolean areInSameSecond(Object comparandObject1, Object comparandObject2) {
-		LocalTime comparand1 = parseTime(comparandObject1), comparand2 = parseTime(comparandObject2);
-		if (comparand1 == null || comparand2 == null) {
-			return false;
-		}
-		return comparand1.getHour() == comparand2.getHour() &&
-				comparand1.getMinute() == comparand2.getMinute() &&
-				comparand1.getSecond() == comparand2.getSecond();
+	public static boolean areInSameSecond(Object... comparandObjects) {
+		return areInSameTimeCore(Arrays.asList(LocalTime::getHour, LocalTime::getMinute, LocalTime::getSecond), comparandObjects);
 	}
 
 	/**
 	 * <font color="#EE2222"><b>Time operation.</b></font><br>
-	 * Evaluates if the two target times are in the same minute.<br>
+	 * Evaluates if the target times are in the same minute.<br>
 	 * Uses {@link #parseDate(Object)} for automatic parsing.
-	 * @param comparandObject1 Target time object to be compared.
-	 * @param comparandObject2 Target time object to be compared.
-	 * @return {@code true} if in.
+	 * @param comparandObjects Target time objects to be compared.
+	 * @return {@code true} if all in the same minute.
 	 */
-	public static boolean areInSameMinute(Object comparandObject1, Object comparandObject2) {
-		LocalTime comparand1 = parseTime(comparandObject1), comparand2 = parseTime(comparandObject2);
-		if (comparand1 == null || comparand2 == null) {
-			return false;
-		}
-		return comparand1.getHour() == comparand2.getHour() &&
-				comparand1.getMinute() == comparand2.getMinute();
+	public static boolean areInSameMinute(Object... comparandObjects) {
+		return areInSameTimeCore(Arrays.asList(LocalTime::getHour, LocalTime::getMinute), comparandObjects);
 	}
 
 	/**
 	 * <font color="#EE2222"><b>Time operation.</b></font><br>
-	 * Evaluates if the two target times are in the same hour.<br>
+	 * Evaluates if the target times are in the same hour.<br>
 	 * Uses {@link #parseDate(Object)} for automatic parsing.
-	 * @param comparandObject1 Target time object to be compared.
-	 * @param comparandObject2 Target time object to be compared.
-	 * @return {@code true} if in.
+	 * @param comparandObjects Target time objects to be compared.
+	 * @return {@code true} if all in the same hour.
 	 */
-	public static boolean areInSameHour(Object comparandObject1, Object comparandObject2) {
-		LocalTime comparand1 = parseTime(comparandObject1), comparand2 = parseTime(comparandObject2);
-		if (comparand1 == null || comparand2 == null) {
-			return false;
+	public static boolean areInSameHour(Object... comparandObjects) {
+		return areInSameTimeCore(Arrays.asList(LocalTime::getHour), comparandObjects);
+	}
+
+	private static boolean areInSameTimeCore(List<Function<LocalTime, Integer>> comparators, Object... comparandObjects) {
+		for (int index = 1; index < comparandObjects.length; index ++) {
+			LocalTime comparand1 = parseTime(comparandObjects[0]), comparand2 = parseTime(comparandObjects[index]);
+			if (comparand1 == null || comparand2 == null) {
+				return false;
+			}
+			for (Function<LocalTime, Integer> comparator : comparators) {
+				if (!comparator.apply(comparand1).equals(comparator.apply(comparand2))) {
+					return false;
+				}
+			}
 		}
-		return comparand1.getHour() == comparand2.getHour();
+		return true;
 	}
 
 	/**
